@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Inception",
+    "description": "A thief with the ability to enter people's dreams takes on one last job: planting an ea into someone's subconscious.",
+    "showtimes": ["10:00 AM", "1:30 PM", "5:00 PM", "8:00 PM"],
+    "duration": "148 min"
+  },
+  {
+    "title": "Interstellar",
+    "description": "A group of astronauts travels through a wormhole in search of a new habitable planet for humanity.",
+    "showtimes": ["11:00 AM", "2:00 PM", "6:00 PM", "9:30 PM"],
+    "duration": "169 min"
+  },
+  {
+    "title": "The Dark Knight",
+    "description": "Batman battles the Joker, who seeks to create chaos in Gotham City.",
+    "showtimes": ["12:00 PM", "3:30 PM", "7:00 PM", "10:30 PM"],
+    "duration": "152 min"
+  },
+  {
+    "title": "Avengers: Endgame",
+    "description": "The Avengers assemble one last time to undo the devastating effects of Thanos' snap.",
+    "showtimes": ["9:00 AM", "12:30 PM", "4:00 PM", "7:30 PM"],
+    "duration": "181 min"
+  },
+  {
+    "title": "Parasite",
+    "description": "A poor family infiltrates the lives of a wealthy household, leading to unexpected consequences.",
+    "showtimes": ["10:30 AM", "2:00 PM", "5:30 PM", "9:00 PM"],
+    "duration": "132 min"
+  },
+  {
+    "title": "The Godfather",
+    "description": "The story of the powerful Corleone crime family and its patriarch, Vito Corleone.",
+    "showtimes": ["11:00 AM", "3:00 PM", "7:00 PM"],
+    "duration": "175 min"
+  },
+  {
+    "title": "Titanic",
+    "description": "A tragic love story set aboard the ill-fated RMS Titanic.",
+    "showtimes": ["9:30 AM", "1:00 PM", "5:30 PM", "9:00 PM"],
+    "duration": "195 min"
+  },
+  {
+    "title": "The Matrix",
+    "description": "A computer hacker discovers the truth about reality and joins a rebellion against the machines.",
+    "showtimes": ["10:00 AM", "1:30 PM", "5:00 PM", "8:30 PM"],
+    "duration": "136 min"
+  },
+  {
+    "title": "Shawshank Redemption",
+    "description": "A man sentenced to life imprisonment finds hope and redemption in an unlikely place.",
+    "showtimes": ["11:30 AM", "3:30 PM", "7:30 PM"],
+    "duration": "142 min"
+  },
+  {
+    "title": "Joker",
+    "description": "The origin story of the Joker, depicting his descent into madness and crime.",
+    "showtimes": ["12:00 PM", "4:00 PM", "8:00 PM"],
+    "duration": "122 min"
+  }
+]
