@@ -5,13 +5,12 @@ import bcrypt from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { checkEmailExist } from "../middlewares/userMiddleware/checkEmailExist";
 import { compare } from "bcryptjs";
+import prisma from "../prismaClient";
 
 const SALT = 10;
 const KEY = process.env.KEY || "secret";
 
 const userRoute = Router();
-
-const prisma = new PrismaClient();
 
 const signupSchema = z
   .object({

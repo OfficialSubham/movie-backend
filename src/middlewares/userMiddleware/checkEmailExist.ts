@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
-
-const prisma = new PrismaClient();
+import prisma from "../../prismaClient";
 
 export const checkEmailExist = async (
   req: Request,
@@ -9,7 +8,10 @@ export const checkEmailExist = async (
   next: NextFunction,
 ): Promise<void> => {
   const { email } = req.body;
-
+  if (!email) {
+    res.status(400).json({ message: "Enter valid credentials" });
+    return;
+  }
   const user = await prisma.user.findUnique({
     where: {
       email,

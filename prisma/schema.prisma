@@ -32,10 +32,11 @@ model Movie {
 }
 
 model Tickets {
-  id             Int   @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   userId         Int
   movieId        Int
   numberOfTicket Int
-  user           User  @relation(fields: [userId], references: [id])
-  movie          Movie @relation(fields: [movieId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
+  movie          Movie    @relation(fields: [movieId], references: [id])
+  showtimes      String[]
 }

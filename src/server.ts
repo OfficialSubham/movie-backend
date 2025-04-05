@@ -5,6 +5,7 @@ import express, {
   Response,
 } from "express";
 import userRoute from "./routes/userRoute";
+import movieRoute from "./routes/movieRoute";
 
 const app = express();
 
@@ -17,6 +18,10 @@ app.get("/", (req, res) => {
 //User specific route
 
 app.use("/user", userRoute);
+
+//Movie specific route
+
+app.use("/movie", movieRoute);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route Not Found" });
