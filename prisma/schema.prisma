@@ -29,6 +29,7 @@ model Movie {
   duration    String
   Tickets     Tickets[]
   Showtimes   Showtimes[]
+  price       Int
 }
 
 model Tickets {

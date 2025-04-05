@@ -21,6 +21,7 @@ async function uploadData() {
         title: movie.title,
         description: movie.description,
         duration: movie.duration,
+        price: movie.price,
       },
     });
 

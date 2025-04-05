@@ -2,8 +2,24 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response, Router } from "express";
 import prisma from "../prismaClient";
 import { checkUserLoggedIn } from "../middlewares/movieMiddleware/checkUserLoggedin";
+import Stripe from "stripe";
 
+const stripe = new Stripe(process.env.API_KEY || "");
 const movieRoute = Router();
+
+interface ICardDetails {
+  number: string;
+  exp_month: number;
+  exp_year: number;
+  cvc: string;
+}
+
+interface BookTicketRequestBody {
+  id: number;
+  quantity: number;
+  showtimeId: number;
+  cardMethod: string;
+}
 
 //get all the movies without login
 
@@ -23,9 +39,10 @@ movieRoute.get("/movies", async (req: Request, res: Response) => {
 
 movieRoute.post("/book", checkUserLoggedIn, async (req, res): Promise<void> => {
   try {
-    const { id, quantity, showtimeId } = req.body;
-    if (!id || !quantity || !showtimeId) {
-      res.status(400).json({ message: "Please give movie data" });
+    const { id, quantity, showtimeId, cardMethod }: BookTicketRequestBody =
+      req.body;
+    if (!id || !quantity || !showtimeId || !cardMethod) {
+      res.status(400).json({ message: "Please provide proper details" });
       return;
     }
     const movie = await prisma.movie.findUnique({
@@ -44,6 +61,32 @@ movieRoute.post("/book", checkUserLoggedIn, async (req, res): Promise<void> => {
 
     if (!time) {
       res.status(400).json({ message: "Enter a valid time" });
+      return;
+    }
+
+    const amountInPaisa = movie.price * 100;
+    const totalAmount = amountInPaisa * quantity;
+
+    //Payments
+
+    const paymentMethod = await stripe.paymentMethods.create({
+      type: "card",
+      card: { token: cardMethod },
+    });
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalAmount,
+      currency: "inr",
+      payment_method: paymentMethod.id,
+      confirm: true,
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: "never",
+      },
+    });
+
+    if (paymentIntent.status !== "succeeded") {
+      res.status(400).json({ message: "Some error occured during payment" });
       return;
     }
 
