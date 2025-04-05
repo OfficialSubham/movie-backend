@@ -18,7 +18,46 @@ movieRoute.get("/movies", async (req: Request, res: Response) => {
 });
 
 movieRoute.post("/book", checkUserLoggedIn, async (req, res): Promise<void> => {
-  res.json({ message: "working" });
+  try {
+    const { id, quantity, showtimeId } = req.body;
+    if (!id || !quantity || !showtimeId) {
+      res.status(400).json({ message: "Please give movie data" });
+      return;
+    }
+    const movie = await prisma.movie.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        Showtimes: true,
+      },
+    });
+    if (!movie) {
+      res.status(400).json({ message: "movie doesnot exists" });
+      return;
+    }
+    const time = movie.Showtimes.find((times) => times.id === showtimeId);
+
+    console.log(time);
+    if (!time) {
+      res.status(400).json({ message: "Enter a valid time" });
+      return;
+    }
+
+    const bookedMovie = await prisma.tickets.create({
+      data: {
+        userId: req.userJWTData.id,
+        movieId: id,
+        movieName: movie.title,
+        numberOfTicket: quantity,
+        showtimes: [time.time],
+      },
+    });
+    res.json({ message: "Ticket book successfully", ticket: bookedMovie });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Error" });
+  }
 });
 
 export default movieRoute;

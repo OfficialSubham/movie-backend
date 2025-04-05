@@ -10,5 +10,12 @@ declare module "express-serve-static-core" {
       email: string;
       password: string;
     };
+    userJWTData: {
+      id: number;
+      firstName: string;
+      lastName: string;
+      email: string;
+      iat?: number;
+    };
   }
 }

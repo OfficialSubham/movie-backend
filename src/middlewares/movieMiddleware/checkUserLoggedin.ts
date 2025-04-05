@@ -3,6 +3,14 @@ import { decode, verify } from "jsonwebtoken";
 
 const KEY = process.env.KEY || "";
 
+interface IuserJWTData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  iat?: number;
+}
+
 export const checkUserLoggedIn = async (
   req: Request,
   res: Response,
@@ -14,7 +22,12 @@ export const checkUserLoggedIn = async (
       res.status(400).json({ message: "Unauthorized User" });
       return;
     }
-    const user = verify(token, KEY);
+    const user = verify(token, KEY) as IuserJWTData;
+    if (!user) {
+      res.status(400).json({ message: "Unauthorized User" });
+      return;
+    }
+    req.userJWTData = user;
     next();
   } catch (error) {
     console.log(error);
