@@ -1,0 +1,1 @@
+{"root":["./src/server.ts","./src/middlewares/movieMiddleware/check.ts","./src/middlewares/userMiddleware/checkEmailExist.ts","./src/routes/userRoute.ts","./src/types/express.d.ts"],"version":"5.8.2"}

@@ -14,7 +14,6 @@ async function uploadData() {
 
 uploadData()
 
-//delete data if needed
 async function deleteData() {
     const res = await prisma.movie.deleteMany()
     console.log(res)
