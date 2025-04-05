@@ -1,20 +1,49 @@
-import { PrismaClient } from "@prisma/client"
-import * as data from "./movie.json" 
+import { PrismaClient } from "@prisma/client";
+import * as data from "./movie.json";
 
-const prisma = new PrismaClient()
-const moviesArray = (data as any).default || data
+const moviesArray = (data as any).default || data;
+const prisma = new PrismaClient();
+interface IMovies {
+  title: string;
+  description: string;
+  showtimes: string[];
+  duration: string;
+}
 
 async function uploadData() {
-    const res = await prisma.movie.createMany({
-        data: moviesArray
-    })
-    console.log(res)
-    console.log("done")
+  // const res = await prisma.movie.createMany({
+  //  data: moviesArray,
+  //});
+
+  for (const movie of moviesArray) {
+    const createdMovie = await prisma.movie.create({
+      data: {
+        title: movie.title,
+        description: movie.description,
+        duration: movie.duration,
+      },
+    });
+
+    const showTimesPromise = movie.showtimes.map((time: string) => {
+      return prisma.showtimes.create({
+        data: {
+          movieId: createdMovie.id,
+          time,
+        },
+      });
+    });
+
+    await Promise.all(showTimesPromise);
+  }
+
+  console.log("done");
 }
 
-uploadData()
+uploadData();
 
 async function deleteData() {
-    const res = await prisma.movie.deleteMany()
-    console.log(res)
+  const res = await prisma.movie.deleteMany();
+  console.log(res);
 }
+
+//deleteData();

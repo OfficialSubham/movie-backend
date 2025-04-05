@@ -15,7 +15,6 @@ export const checkUserLoggedIn = async (
       return;
     }
     const user = verify(token, KEY);
-    console.log(user);
     next();
   } catch (error) {
     console.log(error);

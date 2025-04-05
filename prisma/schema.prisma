@@ -23,12 +23,12 @@ model User {
 }
 
 model Movie {
-  id          Int       @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   title       String
   description String
-  showtimes   String[]
   duration    String
   Tickets     Tickets[]
+  Showtimes   Showtimes[]
 }
 
 model Tickets {
@@ -37,6 +37,15 @@ model Tickets {
   movieId        Int
   numberOfTicket Int
   user           User     @relation(fields: [userId], references: [id])
-  movie          Movie    @relation(fields: [movieId], references: [id])
+  movie          Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
   showtimes      String[]
+  movieName      String
+  cancellation   Boolean  @default(false)
+}
+
+model Showtimes {
+  id      Int    @id @default(autoincrement())
+  time    String
+  movieId Int
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
 }
