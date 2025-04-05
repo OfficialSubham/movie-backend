@@ -83,6 +83,7 @@ movieRoute.post("/book", checkUserLoggedIn, async (req, res): Promise<void> => {
         enabled: true,
         allow_redirects: "never",
       },
+      receipt_email: req.userJWTData.email,
     });
 
     if (paymentIntent.status !== "succeeded") {
