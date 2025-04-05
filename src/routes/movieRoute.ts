@@ -9,7 +9,11 @@ const movieRoute = Router();
 
 movieRoute.get("/movies", async (req: Request, res: Response) => {
   try {
-    const movies = await prisma.movie.findMany({});
+    const movies = await prisma.movie.findMany({
+      include: {
+        Showtimes: true,
+      },
+    });
     res.json({ message: "All Movies", movies });
   } catch (error) {
     console.log(error);
@@ -38,7 +42,6 @@ movieRoute.post("/book", checkUserLoggedIn, async (req, res): Promise<void> => {
     }
     const time = movie.Showtimes.find((times) => times.id === showtimeId);
 
-    console.log(time);
     if (!time) {
       res.status(400).json({ message: "Enter a valid time" });
       return;
@@ -50,7 +53,7 @@ movieRoute.post("/book", checkUserLoggedIn, async (req, res): Promise<void> => {
         movieId: id,
         movieName: movie.title,
         numberOfTicket: quantity,
-        showtimes: [time.time],
+        showtime: time.time,
       },
     });
     res.json({ message: "Ticket book successfully", ticket: bookedMovie });
@@ -59,5 +62,57 @@ movieRoute.post("/book", checkUserLoggedIn, async (req, res): Promise<void> => {
     res.status(500).json({ message: "Internal Error" });
   }
 });
+
+movieRoute.get(
+  "/bookings",
+  checkUserLoggedIn,
+  async (req, res): Promise<void> => {
+    try {
+      const { id } = req.userJWTData;
+      const bookedMovie = await prisma.tickets.findMany({
+        where: {
+          userId: id,
+        },
+      });
+
+      res.json({ message: "Working", bookedMovie });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal Error" });
+    }
+  },
+);
+
+movieRoute.delete(
+  "/bookings/:id",
+  checkUserLoggedIn,
+  async (req, res): Promise<void> => {
+    try {
+      const { id } = req.params;
+      await prisma.tickets.updateMany({
+        where: {
+          AND: [
+            {
+              id: Number(id),
+            },
+            {
+              userId: req.userJWTData.id,
+            },
+          ],
+        },
+        data: {
+          cancellation: true,
+        },
+      });
+      res.json({
+        message:
+          "Your booking has been cancelled. You will get your refund shortly",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal Error" });
+    }
+  },
+);
 
 export default movieRoute;
